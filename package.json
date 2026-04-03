@@ -1,0 +1,28 @@
+{
+  "name": "watchvault",
+  "version": "1.0.0",
+  "description": "Smart Youtube Watch Later Manager",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:vite\" \"npm run dev:firebase\"",
+    "dev:vite": "cd src && npm run dev",
+    "dev:firebase": "firebase emulators:start --only functions",
+    "build": "cd src && npm run build",
+    "deploy": "npm run build && firebase deploy"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Christian3h/WatchVault.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "GPL-3.0",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/Christian3h/WatchVault/issues"
+  },
+  "homepage": "https://github.com/Christian3h/WatchVault#readme"
+}
