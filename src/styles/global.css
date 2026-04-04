@@ -1,6 +1,7 @@
 :root {
     --color-background: black;
     --color-primary: white;
+    --loading-overlay-bg: var(--color-background);
 }
 
 body {

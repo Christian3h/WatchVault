@@ -1,0 +1,26 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding-bottom: 1.25rem;
+}
+.logo {
+  font-size: 2rem;
+  font-weight: bold;
+  letter-spacing: 0.05em;
+}
+.search {
+  flex: 1 1 320px;
+  max-width: 420px;
+  padding: 0.5em 1em;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid #444;
+  background: var(--color-primary, #fff);
+  color: var(--color-background, #111);
+}
+.avatar {
+  width: 40px;
+  height: 40px;
+}

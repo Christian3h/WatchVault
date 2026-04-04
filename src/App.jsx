@@ -1,15 +1,27 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute"
 import Login from "./pages/Login"
+import Dashboard from "./pages/Dashboard"
+import PublicRoute from "./components/PublicRoute/PublicRoute"
 import "./styles/global.css"
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* <Route path='/' element={<Dashboard />} /> */}
-        <Route path='/login' element={<Login />} />
+        <Route path="/login" element={
+          <PublicRoute>
+            <Login />
+          </PublicRoute>
+        } />
+
+        <Route path='/' element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        } />
         {/* <Route path='/config' element={<Config />} /> */}
-      </Routes>
+              </Routes>
     </BrowserRouter>
   )
 }

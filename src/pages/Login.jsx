@@ -6,35 +6,40 @@ import { db } from "../firebase";
 import { signInWithPopup } from "firebase/auth";
 import { GoogleAuthProvider } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 
 
-async function handleGoogleSignIn() {
-  try {
-    const provider = new GoogleAuthProvider();
-    const result = await signInWithPopup(auth, provider);
-    const user = result.user;
-
-    const userDocRef = doc(db, "users", user.uid);
-
-    await setDoc(userDocRef, {
-      uid: user.uid,
-      displayName: user.displayName,
-      email: user.email,
-      photoURL: user.photoURL,
-
-      //timestamps
-      createdAt: user.metadata.creationTime
-        ? new Date(user.metadata.creationTime).toISOString()
-        : new Date().toISOString(),
-      lastLogin: new Date().toISOString(),
-      theme: 'dark',
-    }, { merge: true });
-  } catch (error) {
-    console.log(error);
-  }
-}
 
 function Login() {
+
+  const navigate = useNavigate();
+
+  async function handleGoogleSignIn() {
+    try {
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      const userDocRef = doc(db, "users", user.uid);
+
+      await setDoc(userDocRef, {
+        uid: user.uid,
+        displayName: user.displayName,
+        email: user.email,
+        photoURL: user.photoURL,
+
+        //timestamps
+        createdAt: user.metadata.creationTime
+          ? new Date(user.metadata.creationTime).toISOString()
+          : new Date().toISOString(),
+        lastLogin: new Date().toISOString(),
+        theme: 'dark',
+      }, { merge: true });
+
+      navigate('/', { replace: true });
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <div className={styles.container}>

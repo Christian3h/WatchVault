@@ -24,5 +24,8 @@
   "bugs": {
     "url": "https://github.com/Christian3h/WatchVault/issues"
   },
-  "homepage": "https://github.com/Christian3h/WatchVault#readme"
+  "homepage": "https://github.com/Christian3h/WatchVault#readme",
+  "dependencies": {
+    "react-firebase-hooks": "^5.1.1"
+  }
 }
