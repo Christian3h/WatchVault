@@ -1,4 +1,4 @@
-```
+
 # WatchVault 🔒
 
 > Tu gestor personal de videos de YouTube. Organizá, rastreá y conquistá tu cola de videos.
@@ -98,7 +98,3 @@ Este proyecto está bajo la [GNU General Public License v3.0](./LICENSE).
 
 Eso significa que podés usar, estudiar, modificar y distribuir el código libremente, siempre que cualquier trabajo derivado también se distribuya bajo la misma licencia GPL-3.0.
 
----
-
-Hecho con ❤️ por tu-usuario
-```
