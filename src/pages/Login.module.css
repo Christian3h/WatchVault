@@ -1,10 +1,10 @@
 
-h1{
+.title{
     color: var(--color-primary);
     font-size: clamp(3rem, 7vw, 9rem);
 }
 
-div {
+.container {
     width: 100dvw;
     height: 100dvh;
     display: flex;

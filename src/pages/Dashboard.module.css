@@ -1,0 +1,124 @@
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 80px 24px 40px 24px; /* Espacio para el Header fijo */
+  min-height: 100vh;
+  box-sizing: border-box;
+  background-color: var(--color-background, #0f0f0f);
+}
+
+.welcome {
+  margin-bottom: 2rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid #333;
+}
+
+.welcome p {
+  font-size: 1.1rem;
+  color: #aaaaaa;
+  margin: 0 0 1rem 0;
+}
+
+.welcome strong {
+  color: #ffffff;
+}
+
+/* Selector Estilizado */
+select {
+  width: 100%;
+  max-width: 350px;
+  padding: 10px 14px;
+  background-color: #1a1a1a;
+  color: #f1f1f1;
+  border: 1px solid #3f3f3f;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+select:focus {
+  border-color: #ff0000;
+}
+
+/* Grilla de Videos Responsiva */
+.grid {
+  display: grid;
+  /* El auto-fill con minmax evita que los videos se vuelvan gigantes en pantallas grandes */
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 24px;
+  margin-top: 2rem;
+  width: 100%;
+}
+
+/* Tarjeta de Video */
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+}
+
+.card img {
+  width: 100%;
+  aspect-ratio: 16 / 9; /* Mantiene la proporción de YouTube siempre */
+  object-fit: cover;
+  border-radius: 12px;
+  background-color: #2a2a2a;
+}
+
+.card h3 {
+  font-size: 0.95rem;
+  margin: 0;
+  color: #f1f1f1;
+  line-height: 1.4;
+  font-weight: 500;
+  /* Limita a 2 líneas de texto */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card p {
+  font-size: 0.85rem;
+  color: #aaaaaa;
+  margin: 0;
+}
+
+/* Estados de carga y error */
+.content {
+  width: 100%;
+}
+
+.loadingText {
+  text-align: center;
+  padding: 4rem;
+  color: #888;
+  font-size: 1.1rem;
+}
+
+/* Media Queries para ajuste fino */
+@media (max-width: 600px) {
+  .container {
+    padding-top: 70px;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr; /* Un solo video por fila en móviles */
+    gap: 30px;
+  }
+  
+  .welcome h1 {
+    font-size: 1.5rem;
+  }
+}

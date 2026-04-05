@@ -1,6 +1,8 @@
 :root {
     --color-background: black;
     --color-primary: white;
+    --color-alert: #ff0000;
+    --color-acepted: #00ff00;
     --loading-overlay-bg: var(--color-background);
 }
 
@@ -10,4 +12,8 @@ body {
     box-sizing: border-box;
     background-color: var(--color-background) !important;
     font-family: "Saira Stencil", sans-serif;
+}
+
+p, pre, h1, h2, h3, h4, h5, h6 {
+    color: var(--color-primary);
 }

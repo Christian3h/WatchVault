@@ -17,16 +17,19 @@ function Login() {
   async function handleGoogleSignIn() {
     try {
       const provider = new GoogleAuthProvider();
+      provider.addScope('https://www.googleapis.com/auth/youtube.readonly');
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
       const userDocRef = doc(db, "users", user.uid);
+      const credential = GoogleAuthProvider.credentialFromResult(result);
+      const tokenParaYouTube = credential.accessToken;
 
       await setDoc(userDocRef, {
         uid: user.uid,
         displayName: user.displayName,
         email: user.email,
         photoURL: user.photoURL,
-
+        youtubeToken: tokenParaYouTube,
         //timestamps
         createdAt: user.metadata.creationTime
           ? new Date(user.metadata.creationTime).toISOString()
