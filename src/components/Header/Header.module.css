@@ -54,8 +54,22 @@
   padding: 5px;
   border: 1px solid var(--color-primary);
   background-color: var(--color-background);
+  transform: scale(0.95) translateY(6px);
+  opacity: 0;
+  animation: dropdownFadeIn 180ms ease-out forwards;
 }
 
 .logoutBtn {
   color: #ff4d4d !important; /* Rojo para el logout */
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }

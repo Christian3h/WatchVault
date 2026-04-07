@@ -5,12 +5,30 @@
     align-items: center;
     background-color: var(--color-background);
     color: var(--color-primary);
+    cursor: pointer;
+    opacity: 0;
+    animation: videoItemFadeIn 200ms ease-out forwards;
+    transition: transform 160ms ease-out, box-shadow 160ms ease-out;
 }
 
 .videoItem img {
     width: 100%;
     height: auto;
     border-radius: 8px;
+}
+
+.videoItem:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+@keyframes videoItemFadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 .thumbnail {
@@ -29,7 +47,7 @@
 
 .videoItem p,h3 {
     margin: 0;
-    font-size: clamp(1rem, 1.2vw, 1.5rem);
+    font-size: clamp(1rem, 1.2vw, 1.2rem);
     font-weight: normal;
     max-width: 90%;
 }

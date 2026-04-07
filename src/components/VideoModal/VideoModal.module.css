@@ -1,0 +1,176 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  /* Bloquea el scroll de fondo al mostrar el modal */
+  overflow: hidden;
+}
+
+.modal {
+  background: var(--color-bg, #0b0b0f);
+  color: var(--color-text, #ffffff);
+  border-radius: 8px;
+  padding: 20px;
+  max-width: 720px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+  position: relative;
+  border: 1px solid var(--color-primary, #ff0000);
+  /* Animación de aparición */
+  transform: scale(0.95) translateY(10px);
+  opacity: 0;
+  animation: modalFadeIn 200ms ease-out forwards;
+}
+
+.closeButton {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+}
+
+.closeButton:hover {
+  opacity: 0.8;
+}
+
+.header {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+  align-items: flex-start;
+}
+
+.thumbnail {
+  width: 180px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.channel {
+  font-size: 0.9rem;
+  color: var(--color-muted, #a0a0b0);
+  margin-top: 2px;
+}
+
+.duration {
+  font-size: 0.85rem;
+  color: var(--color-muted, #a0a0b0);
+  margin-top: 0;
+}
+
+.section {
+  margin-top: 16px;
+}
+
+.section h3 {
+  font-size: 1rem;
+  margin-bottom: 6px;
+}
+
+.description {
+  font-size: 0.95rem;
+  width: 80%;
+  margin-left: 2dvw;
+  max-height: 15dvh;
+  overflow-y: auto;
+  white-space: pre-wrap;
+}
+
+/* Scrollbar minimalista solo para la descripción */
+.description::-webkit-scrollbar {
+  width: 6px;
+}
+
+.description::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.description::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.25);
+  border-radius: 3px;
+}
+
+.description::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Firefox */
+.description {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+}
+
+.description_header h2, p {
+  margin: 0;
+  max-width: 98%;
+}
+
+.checkboxRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  margin-left: 2dvw;
+}
+
+.checkboxRow input {
+  cursor: pointer;
+}
+
+.select {
+  width: 100%;
+  max-width: 220px;
+  padding: 6px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--color-border, #333);
+  background: var(--color-bg-secondary, #15151b);
+  color: inherit;
+}
+
+.select:focus {
+  outline: none;
+  border-color: var(--color-primary, #ff0000);
+  box-shadow: 0 0 0 1px var(--color-primary, #ff0000);
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@media (max-width: 600px) {
+  .modal {
+    margin: 0 12px;
+    padding: 16px;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .thumbnail {
+    width: 100%;
+    height: auto;
+  }
+}

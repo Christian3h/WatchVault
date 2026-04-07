@@ -6,20 +6,32 @@ import usePlaylists from '../hooks/usePlaylists';
 import { auth } from '../firebase';
 import VideoGrid from '../components/VideoGrid/VideoGrid';
 import useInfiniteScroll from '../hooks/useInfiniteScroll';
+import VideoModal from '../components/VideoModal/VideoModal';
 
 function Dashboard() {
   const [selectedId, setSelectedId] = useState('');
+  const [selectedVideo, setSelectedVideo] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Hooks de datos
   const { playlists, loading: loadingPlaylists } = usePlaylists();
   const { videos, loading: loadingVideos, error, hasMore, loadMore } = useVideos(selectedId);
 
-  // Hook de scroll infinito basado en IntersectionObserver
   const { lastElementRef: lastVideoElementRef } = useInfiniteScroll({
     loading: loadingVideos,
     hasMore,
     onLoadMore: loadMore,
   });
+
+  const handleVideoClick = (video) => {
+    setSelectedVideo(video);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedVideo(null);
+  };
 
   return (
     <div className={styles.dashboardWrapper}>
@@ -53,8 +65,18 @@ function Dashboard() {
             </div>
           )}
 
+          <VideoGrid
+            videos={videos}
+            lastVideoRef={lastVideoElementRef}
+            onVideoClick={handleVideoClick}
+          />
 
-          <VideoGrid videos={videos} lastVideoRef={lastVideoElementRef} />
+          <VideoModal
+            isOpen={isModalOpen}
+            video={selectedVideo}
+            playlistId={selectedId}
+            onClose={handleCloseModal}
+          />
 
           {loadingVideos && (
             <div className={styles.loadingText}>

@@ -13,14 +13,20 @@ function parseVideoDuration(duration) {
   return `${hours}:${minutes}:${seconds}`;
 }
 
-export default function VideoItem({ title, channel, duration, thumbnail, innerRef }) {
+function truncateTitle(title, maxLength = 50) {
+  if (!title) return '';
+  if (title.length <= maxLength) return title;
+  return `${title.slice(0, maxLength)}...`;
+}
+
+export default function VideoItem({ title, channel, duration, thumbnail, innerRef, onClick }) {
   return (
-    <div className={styles.videoItem} ref={innerRef}>
+    <div className={styles.videoItem} ref={innerRef} onClick={onClick}>
       <div className={styles.thumbnail}>
         <img src={thumbnail} alt={title}/>
         <p>{parseVideoDuration(duration)}</p>
       </div>
-      <h3>{title}</h3>
+      <h3>{truncateTitle(title)}</h3>
       <p className={styles.channel}>{channel}</p>
     </div>
   );
