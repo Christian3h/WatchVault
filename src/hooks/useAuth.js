@@ -3,12 +3,8 @@ import { auth, db } from "../firebase";
 import { doc, getDoc } from "firebase/firestore";
 import { signOut as firebaseSignOut } from "firebase/auth";
 
-/**
- * Hook para centralizar la autenticación y gestión del token de YouTube.
- * Proporciona el estado del usuario actual, funciones para obtener el token de Firestore
- * y una función de logout centralizada.
- */
 export function useAuth() {
+
   const [user, setUser] = useState(auth.currentUser);
   const [loading, setLoading] = useState(true);
 
@@ -33,12 +29,14 @@ export function useAuth() {
     try {
       const userDocRef = doc(db, "users", auth.currentUser.uid);
       const userSnap = await getDoc(userDocRef);
-
       if (userSnap.exists()) {
         return userSnap.data()?.youtubeToken || null;
       }
       return null;
     } catch (error) {
+      if (error.message.includes("network-changed") || error.code === "unavailable" || error.message.includes("BLOCKED_BY_CLIENT")) {
+            console.warn("Interrupción de red detectada, reintentando en 1s...");
+      }
       console.error("Error recuperando el token de YouTube:", error);
       return null;
     }

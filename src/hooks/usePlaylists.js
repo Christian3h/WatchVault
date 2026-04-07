@@ -17,7 +17,7 @@ function usePlaylists(maxResults = 50) {
         setLoading(true);
         setError(null);
 
-        // 1. Obtener el token de acceso de Google
+        // 1. Obtener el token de acceso de Googlege
         const token = await getYoutubeToken();
 
         // 2. Si no hay token, el usuario debe re-autenticarse
