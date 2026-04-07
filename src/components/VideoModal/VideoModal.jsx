@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import styles from './VideoModal.module.css';
 import Button from '../Button/Button';
+import { auth } from '../../firebase';
+import useVideoMeta from '../../hooks/useVideoMeta';
 
 function parseVideoDuration(duration) {
   const match = duration.match(/PT(\d+H)?(\d+M)?(\d+S)?/);
@@ -17,8 +19,18 @@ function parseVideoDuration(duration) {
     .padStart(2, '0')}`;
 }
 
+function durationToSeconds(duration) {
+  if (!duration) return 0;
+  const match = duration.match(/PT(\d+H)?(\d+M)?(\d+S)?/);
+  if (!match) return 0;
+  const hours = match[1] ? parseInt(match[1], 10) : 0;
+  const minutes = match[2] ? parseInt(match[2], 10) : 0;
+  const seconds = match[3] ? parseInt(match[3], 10) : 0;
+  return hours * 3600 + minutes * 60 + seconds;
+}
+
 export default function VideoModal({ isOpen, video, /*playlistId,*/ onClose }) {
-  // Hooks siempre primero y en el mismo orden
+  // 1) Hooks siempre primero y en el mismo orden
   useEffect(() => {
     if (!isOpen) return;
 
@@ -30,22 +42,37 @@ export default function VideoModal({ isOpen, video, /*playlistId,*/ onClose }) {
     };
   }, [isOpen]);
 
-  const [seen, setSeen] = useState(false);
-  const [rating, setRating] = useState('');
+  const userId = auth.currentUser?.uid || null;
+  const videoId = video?.id || video?.contentDetails?.videoId || null;
+  const rawDuration = video?.contentDetails?.duration || '';
+  const durationSeconds = durationToSeconds(rawDuration);
 
-  // Después de los hooks, hacemos el early return
-  if (!isOpen || !video) return null;
-
-  const title = video.snippet?.title || '';
-  const channel = video.snippet?.channelTitle || '';
-  const rawDuration = video.contentDetails?.duration || '';
-  const formattedDuration = rawDuration ? parseVideoDuration(rawDuration) : '';
+  const title = video?.snippet?.title || '';
+  const channel = video?.snippet?.channelTitle || '';
   const thumbnail =
-    video.snippet?.thumbnails?.high?.url ||
-    video.snippet?.thumbnails?.medium?.url ||
+    video?.snippet?.thumbnails?.high?.url ||
+    video?.snippet?.thumbnails?.medium?.url ||
     '';
+  const formattedDuration = rawDuration ? parseVideoDuration(rawDuration) : '';
+  const description = video?.snippet?.description || '';
 
-  const description = video.snippet?.description || '';
+  const {
+    seen,
+    rating,
+    toggleSeen,
+    updateRating,
+  } = useVideoMeta({
+    userId,
+    videoId,
+    durationSeconds,
+    title,
+    channel,
+    thumbnail,
+    rawDuration,
+  });
+
+  // 2) Después de los hooks, early return de render
+  if (!isOpen || !video) return null;
 
   return (
     <div className={styles.backdrop} onClick={onClose}>
@@ -89,13 +116,30 @@ export default function VideoModal({ isOpen, video, /*playlistId,*/ onClose }) {
           </div>
         )}
 
+        {videoId && (
+          <div className={styles.section}>
+            <Button
+              type="button"
+              variant="normal"
+              size="small"
+              onClick={() => {
+                const url = `https://www.youtube.com/watch?v=${videoId}`;
+                window.open(url, '_blank', 'noopener,noreferrer');
+              }}
+            >
+              Ver en YouTube
+            </Button>
+          </div>
+        )}
+
         <div className={styles.section}>
           <h3>Estado</h3>
           <label className={styles.checkboxRow}>
             <input
               type="checkbox"
-              checked={seen}
-              onChange={(e) => setSeen(e.target.checked)}
+              checked={!!seen}
+              onChange={toggleSeen}
+              disabled={!userId}
             />
             <span>Ya lo vi</span>
           </label>
@@ -105,8 +149,9 @@ export default function VideoModal({ isOpen, video, /*playlistId,*/ onClose }) {
           <h3>Puntuación</h3>
           <select
             className={styles.select}
-            value={rating}
-            onChange={(e) => setRating(e.target.value)}
+            value={rating ?? ''}
+            onChange={(e) => updateRating(e.target.value)}
+            disabled={!userId}
           >
             <option value="">Sin puntuación</option>
             <option value="1">1 - Muy malo</option>

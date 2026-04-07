@@ -8,37 +8,39 @@ import {
 import { db } from '../firebase';
 
 /**
- * Hook para manejar el metadata de un video de una playlist en Firestore.
+ * Hook para manejar el metadata de un video en Firestore.
  *
  * Maneja:
  * - estado "visto" (seen)
  * - puntuación (rating)
+ * - duración total del video (durationSeconds)
+ * - tiempo visto acumulado (watchedSeconds)
  *
- * Estructura sugerida del documento:
- * Colección: userPlaylistVideos
- * Doc ID: `${userId}_${playlistId}_${videoId}`
- *
- * Campos:
- * - userId: string
- * - playlistId: string
- * - videoId: string
- * - seen: boolean
- * - rating: number | null
- * - updatedAt: timestamp (serverTimestamp)
+ * Colección: userVideosMeta
+ * Doc ID: `${userId}_${videoId}`
  */
 
-export default function useVideoMeta({ userId, playlistId, videoId }) {
+export default function useVideoMeta({
+  userId,
+  videoId,
+  durationSeconds,
+  title,
+  channel,
+  thumbnail,
+  rawDuration,
+}) {
   const [seen, setSeen] = useState(false);
   const [rating, setRating] = useState(null); // number | null
+  const [watchedSeconds, setWatchedSeconds] = useState(0);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
 
-  const isParamsReady = Boolean(userId && playlistId && videoId);
+  const isParamsReady = Boolean(userId && videoId);
 
   const docRef =
     isParamsReady && db
-      ? doc(db, 'userPlaylistVideos', `${userId}_${playlistId}_${videoId}`)
+      ? doc(db, 'userVideosMeta', `${userId}_${videoId}`)
       : null;
 
   // Cargar metadata inicial desde Firestore
@@ -66,6 +68,9 @@ export default function useVideoMeta({ userId, playlistId, videoId }) {
             setSeen(Boolean(data.seen));
             setRating(
               typeof data.rating === 'number' ? data.rating : null
+            );
+            setWatchedSeconds(
+              typeof data.watchedSeconds === 'number' ? data.watchedSeconds : 0
             );
           } else {
             // No hay documento todavía, usar valores por defecto
@@ -99,13 +104,24 @@ export default function useVideoMeta({ userId, playlistId, videoId }) {
       setError(null);
 
       try {
+        const nextSeenBool = Boolean(nextSeen);
+
         const payload = {
           userId,
-          playlistId,
           videoId,
-          seen: Boolean(nextSeen),
+          seen: nextSeenBool,
           rating:
             typeof nextRating === 'number' ? nextRating : null,
+          // Datos visuales básicos del video para poder reconstruir la tarjeta
+          title: title || null,
+          channel: channel || null,
+          thumbnail: thumbnail || null,
+          rawDuration: rawDuration || null,
+          // Si se marca como visto y tenemos duración, usamos esa duración
+          watchedSeconds:
+            nextSeenBool && typeof durationSeconds === 'number'
+              ? durationSeconds
+              : watchedSeconds,
           updatedAt: serverTimestamp(),
         };
 
@@ -113,13 +129,14 @@ export default function useVideoMeta({ userId, playlistId, videoId }) {
 
         setSeen(payload.seen);
         setRating(payload.rating);
+        setWatchedSeconds(payload.watchedSeconds || 0);
       } catch (err) {
         setError(err);
       } finally {
         setSaving(false);
       }
     },
-    [docRef, userId, playlistId, videoId]
+    [docRef, userId, videoId, durationSeconds, watchedSeconds, title, channel, thumbnail, rawDuration]
   );
 
   const toggleSeen = useCallback(() => {
@@ -151,6 +168,7 @@ export default function useVideoMeta({ userId, playlistId, videoId }) {
   return {
     seen,
     rating,
+    watchedSeconds,
     loading,
     saving,
     error,

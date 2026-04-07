@@ -7,15 +7,29 @@ import { auth } from '../firebase';
 import VideoGrid from '../components/VideoGrid/VideoGrid';
 import useInfiniteScroll from '../hooks/useInfiniteScroll';
 import VideoModal from '../components/VideoModal/VideoModal';
+import useSeenMap from '../hooks/useSeenMap';
 
 function Dashboard() {
   const [selectedId, setSelectedId] = useState('');
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [filter, setFilter] = useState('unseen'); // 'all' | 'unseen' | 'seen'
 
   // Hooks de datos
   const { playlists, loading: loadingPlaylists } = usePlaylists();
   const { videos, loading: loadingVideos, error, hasMore, loadMore } = useVideos(selectedId);
+
+  const userId = auth.currentUser?.uid || null;
+  const { seenMap } = useSeenMap(userId, videos);
+
+  const filteredVideos = videos.filter((video) => {
+    const id = video.id || video.contentDetails?.videoId || null;
+    const seen = id ? seenMap[id] : false;
+
+    if (filter === 'unseen') return !seen;
+    if (filter === 'seen') return !!seen;
+    return true; // 'all'
+  });
 
   const { lastElementRef: lastVideoElementRef } = useInfiniteScroll({
     loading: loadingVideos,
@@ -56,6 +70,16 @@ function Dashboard() {
               </option>
             ))}
           </select>
+
+          <select
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            className={styles.filterSelect}
+          >
+            <option value="unseen">Solo no vistos</option>
+            <option value="all">Todos</option>
+            <option value="seen">Solo vistos</option>
+          </select>
         </section>
 
         <section className={styles.content}>
@@ -66,7 +90,7 @@ function Dashboard() {
           )}
 
           <VideoGrid
-            videos={videos}
+            videos={filteredVideos}
             lastVideoRef={lastVideoElementRef}
             onVideoClick={handleVideoClick}
           />
