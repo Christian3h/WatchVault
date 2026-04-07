@@ -22,6 +22,7 @@ import { db } from '../firebase';
 
 export default function useVideoMeta({
   userId,
+  playlistId,
   videoId,
   durationSeconds,
   title,
@@ -36,20 +37,17 @@ export default function useVideoMeta({
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
 
-  const isParamsReady = Boolean(userId && videoId);
+  const isParamsReady = Boolean(userId && playlistId && videoId);
 
   const docRef =
     isParamsReady && db
-      ? doc(db, 'userVideosMeta', `${userId}_${videoId}`)
+      ? doc(db, 'userVideosMeta', `${userId}_${playlistId}_${videoId}`)
       : null;
 
   // Cargar metadata inicial desde Firestore
   useEffect(() => {
     if (!docRef) {
-      // Si faltan parámetros, reseteamos a valores por defecto
-      setSeen(false);
-      setRating(null);
-      setError(null);
+      // Si no hay una referencia válida todavía, no tocamos el estado actual
       return;
     }
 
@@ -108,6 +106,7 @@ export default function useVideoMeta({
 
         const payload = {
           userId,
+          playlistId,
           videoId,
           seen: nextSeenBool,
           rating:
@@ -136,7 +135,7 @@ export default function useVideoMeta({
         setSaving(false);
       }
     },
-    [docRef, userId, videoId, durationSeconds, watchedSeconds, title, channel, thumbnail, rawDuration]
+    [docRef, userId, playlistId, videoId, durationSeconds, watchedSeconds, title, channel, thumbnail, rawDuration]
   );
 
   const toggleSeen = useCallback(() => {

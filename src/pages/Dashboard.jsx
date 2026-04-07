@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Header from '../components/Header/Header';
 import styles from './Dashboard.module.css';
 import useVideos from '../hooks/useVideos';
@@ -8,28 +8,67 @@ import VideoGrid from '../components/VideoGrid/VideoGrid';
 import useInfiniteScroll from '../hooks/useInfiniteScroll';
 import VideoModal from '../components/VideoModal/VideoModal';
 import useSeenMap from '../hooks/useSeenMap';
+import useSeenVideosList from '../hooks/useSeenVideosList';
+import useDefaultPlaylist from '../hooks/useDefaultPlaylist';
 
 function Dashboard() {
-  const [selectedId, setSelectedId] = useState('');
+  const userId = auth.currentUser?.uid || null;
+  const { defaultPlaylistId, saveDefaultPlaylistId } = useDefaultPlaylist(userId);
+
+  const [selectedId, setSelectedId] = useState(defaultPlaylistId || '');
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [filter, setFilter] = useState('unseen'); // 'all' | 'unseen' | 'seen'
+
+  // Sincronizar selectedId cuando se cargue defaultPlaylistId desde Firestore
+  useEffect(() => {
+    if (defaultPlaylistId && !selectedId) {
+      setSelectedId(defaultPlaylistId);
+    }
+  }, [defaultPlaylistId, selectedId]);
 
   // Hooks de datos
   const { playlists, loading: loadingPlaylists } = usePlaylists();
   const { videos, loading: loadingVideos, error, hasMore, loadMore } = useVideos(selectedId);
 
-  const userId = auth.currentUser?.uid || null;
   const { seenMap } = useSeenMap(userId, videos);
+  const {
+    videos: seenVideos,
+    loading: loadingSeenVideos,
+    error: errorSeenVideos,
+  } = useSeenVideosList(userId);
 
-  const filteredVideos = videos.filter((video) => {
-    const id = video.id || video.contentDetails?.videoId || null;
-    const seen = id ? seenMap[id] : false;
+  const filteredVideos = (() => {
+    if (filter === 'seen') {
+      // Usar solo datos de Firebase cuando el filtro es "solo vistos"
+      return seenVideos.map((item) => ({
+        id: item.videoId,
+        snippet: {
+          title: item.title || 'Video visto',
+          channelTitle: item.channel || '',
+          thumbnails: {
+            medium: { url: item.thumbnail || '' },
+            high: { url: item.thumbnail || '' },
+          },
+          description: '',
+        },
+        contentDetails: {
+          duration: item.rawDuration || '',
+          videoId: item.videoId,
+        },
+      }));
+    }
 
-    if (filter === 'unseen') return !seen;
-    if (filter === 'seen') return !!seen;
-    return true; // 'all'
-  });
+    // Para "unseen" y "all" usamos la lista de YouTube filtrada por seenMap
+    return videos.filter((video) => {
+      const id = video.id || video.contentDetails?.videoId || null;
+      const seen = id ? seenMap[id] : false;
+
+      if (filter === 'unseen') return !seen;
+      if (filter === 'seen') return !!seen;
+      return true; // 'all'
+    });
+  })();
 
   const { lastElementRef: lastVideoElementRef } = useInfiniteScroll({
     loading: loadingVideos,
@@ -38,6 +77,9 @@ function Dashboard() {
   });
 
   const handleVideoClick = (video) => {
+    // Evitamos abrir el modal si no hay playlist seleccionada,
+    // ya que la metadata de visto se guarda por playlistId
+    if (!selectedId) return;
     setSelectedVideo(video);
     setIsModalOpen(true);
   };
@@ -59,7 +101,11 @@ function Dashboard() {
           </p>
 
           <select
-            onChange={(e) => setSelectedId(e.target.value)}
+            onChange={(e) => {
+              const value = e.target.value;
+              setSelectedId(value);
+              saveDefaultPlaylistId(value);
+            }}
             value={selectedId}
             disabled={loadingPlaylists}
           >
@@ -89,6 +135,12 @@ function Dashboard() {
             </div>
           )}
 
+          {errorSeenVideos && filter === 'seen' && (
+            <div className={styles.errorText}>
+              <p>⚠️ Error cargando videos vistos: {String(errorSeenVideos)}</p>
+            </div>
+          )}
+
           <VideoGrid
             videos={filteredVideos}
             lastVideoRef={lastVideoElementRef}
@@ -102,21 +154,33 @@ function Dashboard() {
             onClose={handleCloseModal}
           />
 
-          {loadingVideos && (
+          {(loadingVideos && filter !== 'seen') && (
             <div className={styles.loadingText}>
               Analizando videos de la bóveda...
             </div>
           )}
 
-          {!selectedId && !loadingVideos && (
+          {(loadingSeenVideos && filter === 'seen') && (
+            <div className={styles.loadingText}>
+              Cargando videos vistos desde tu bóveda...
+            </div>
+          )}
+
+          {!selectedId && !loadingVideos && filter !== 'seen' && (
             <div className={styles.loadingText}>
               Selecciona una lista arriba para ver tus videos.
             </div>
           )}
 
-          {selectedId && videos.length === 0 && !loadingVideos && (
+          {filter !== 'seen' && selectedId && videos.length === 0 && !loadingVideos && (
             <div className={styles.loadingText}>
               No se encontraron videos en esta lista.
+            </div>
+          )}
+
+          {filter === 'seen' && !loadingSeenVideos && filteredVideos.length === 0 && (
+            <div className={styles.loadingText}>
+              Aún no has marcado videos como vistos.
             </div>
           )}
         </section>

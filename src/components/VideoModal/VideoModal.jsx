@@ -29,7 +29,7 @@ function durationToSeconds(duration) {
   return hours * 3600 + minutes * 60 + seconds;
 }
 
-export default function VideoModal({ isOpen, video, /*playlistId,*/ onClose }) {
+export default function VideoModal({ isOpen, video, playlistId, onClose }) {
   // 1) Hooks siempre primero y en el mismo orden
   useEffect(() => {
     if (!isOpen) return;
@@ -63,6 +63,7 @@ export default function VideoModal({ isOpen, video, /*playlistId,*/ onClose }) {
     updateRating,
   } = useVideoMeta({
     userId,
+    playlistId,
     videoId,
     durationSeconds,
     title,
