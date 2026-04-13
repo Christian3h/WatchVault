@@ -11,6 +11,8 @@ import useSeenMap from '../hooks/useSeenMap';
 import useSeenVideosList from '../hooks/useSeenVideosList';
 import useDefaultPlaylist from '../hooks/useDefaultPlaylist';
 import SearchBar from '../components/SearchBar/SearchBar';
+import StatisticsPanel from '../components/StatisticsPanel/StatisticsPanel';
+import { useStatistics } from '../hooks/useStatistics';
 
 function Dashboard() {
   const userId = auth.currentUser?.uid || null;
@@ -39,6 +41,9 @@ function Dashboard() {
     loading: loadingSeenVideos,
     error: errorSeenVideos,
   } = useSeenVideosList(userId);
+
+  // Estadísticas
+  const { stats, loading: loadingStats, error: errorStats } = useStatistics(userId);
 
   const filteredVideos = (() => {
     let videoList;
@@ -164,6 +169,13 @@ function Dashboard() {
             )}
           </div>
         </section>
+
+        {/* Panel de Estadísticas */}
+        <StatisticsPanel 
+          stats={stats}
+          loading={loadingStats}
+          error={errorStats}
+        />
 
         <section className={styles.content}>
           {error && (

@@ -1,0 +1,368 @@
+/* StatisticsPanel - Estilo B&W minimalista (tema oscuro) */
+
+.panel {
+  background-color: #1a1a1a;
+  border: 1px solid #3f3f3f;
+  border-radius: 12px;
+  margin-top: 1.5rem;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.panel:hover {
+  border-color: #555555;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  background-color: #222222;
+  border-bottom: 1px solid transparent;
+}
+
+.panel.expanded .header {
+  border-bottom-color: #3f3f3f;
+}
+
+.header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #f1f1f1;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.toggleButton {
+  background: none;
+  border: 1px solid #3f3f3f;
+  color: #f1f1f1;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.toggleButton:hover {
+  background-color: #333333;
+  border-color: #555555;
+}
+
+.toggleButton:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
+
+.toggleButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.content {
+  padding: 1.25rem;
+}
+
+/* Loading state */
+.loading {
+  padding: 2rem 1.25rem;
+  text-align: center;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #3f3f3f;
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  margin: 0 auto 1rem;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading p {
+  margin: 0;
+  color: #aaaaaa;
+  font-size: 0.9rem;
+}
+
+/* Error state */
+.error {
+  padding: 1.25rem;
+  background-color: rgba(255, 107, 107, 0.1);
+  border-left: 3px solid #ff6b6b;
+  border-radius: 4px;
+  margin: 1.25rem;
+}
+
+.error p {
+  margin: 0 0 0.5rem 0;
+  color: #ff6b6b;
+  font-weight: 500;
+}
+
+.error small {
+  color: #cccccc;
+  font-size: 0.85rem;
+}
+
+/* Empty state */
+.emptyState {
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.emptyState p {
+  margin: 0 0 0.5rem 0;
+  color: #f1f1f1;
+  font-size: 1rem;
+}
+
+.emptyState small {
+  color: #888888;
+  font-size: 0.85rem;
+}
+
+/* Quick stats */
+.quickStats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.statCard {
+  background-color: #222222;
+  border: 1px solid #3f3f3f;
+  border-radius: 8px;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  transition: all 0.2s ease;
+}
+
+.statCard:hover {
+  border-color: #555555;
+  transform: translateY(-2px);
+}
+
+.statIcon {
+  font-size: 1.5rem;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #2a2a2a;
+  border-radius: 6px;
+}
+
+.statContent {
+  flex: 1;
+}
+
+.statValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+
+.statLabel {
+  font-size: 0.85rem;
+  color: #aaaaaa;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Sections */
+.section {
+  margin-bottom: 1.5rem;
+}
+
+.section:last-child {
+  margin-bottom: 0;
+}
+
+.section h4 {
+  margin: 0 0 1rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #f1f1f1;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Channels list */
+.channelsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.channelItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+}
+
+.channelItem:hover {
+  background-color: #222222;
+}
+
+.channelRank {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #2a2a2a;
+  border-radius: 50%;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.channelInfo {
+  flex: 1;
+  min-width: 0; /* Para que el texto no desborde */
+}
+
+.channelName {
+  font-size: 0.95rem;
+  color: #f1f1f1;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.channelCount {
+  font-size: 0.8rem;
+  color: #888888;
+}
+
+.channelBar {
+  flex: 0 0 80px;
+  height: 6px;
+  background-color: #2a2a2a;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.channelBarFill {
+  height: 100%;
+  background-color: #ffffff;
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+/* Weekly chart */
+.weeklyChart {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 0.5rem;
+  height: 120px;
+  padding: 0.5rem;
+  background-color: #222222;
+  border-radius: 8px;
+}
+
+.weekDay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  height: 100%;
+}
+
+.dayLabel {
+  font-size: 0.8rem;
+  color: #aaaaaa;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.dayBar {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.dayBarFill {
+  width: 70%;
+  background-color: #ffffff;
+  border-radius: 3px 3px 0 0;
+  transition: height 0.5s ease;
+  min-height: 4px;
+}
+
+.dayCount {
+  font-size: 0.8rem;
+  color: #f1f1f1;
+  font-weight: 600;
+  margin-top: 0.5rem;
+}
+
+/* Footer */
+.footer {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #3f3f3f;
+  text-align: center;
+}
+
+.footer small {
+  color: #888888;
+  font-size: 0.8rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .quickStats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .weeklyChart {
+    height: 100px;
+  }
+  
+  .dayLabel {
+    font-size: 0.75rem;
+  }
+  
+  .dayCount {
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .quickStats {
+    grid-template-columns: 1fr;
+  }
+  
+  .channelBar {
+    display: none; /* Ocultar barras en móviles muy pequeños */
+  }
+}
