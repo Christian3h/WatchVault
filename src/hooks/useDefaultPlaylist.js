@@ -40,9 +40,8 @@ export default function useDefaultPlaylist(userId) {
           const data = snap.data();
           setDefaultPlaylistId(data.defaultPlaylistId || '');
         }
-      } catch (err) {
+       } catch (err) {
         if (!cancelled) {
-          console.warn('useDefaultPlaylist: error cargando defaultPlaylistId', err);
           setError(err);
         }
       } finally {
@@ -74,8 +73,7 @@ export default function useDefaultPlaylist(userId) {
           { defaultPlaylistId: playlistId || '' },
           { merge: true }
         );
-      } catch (err) {
-        console.warn('useDefaultPlaylist: error guardando defaultPlaylistId', err);
+       } catch (err) {
         setError(err);
       }
     },

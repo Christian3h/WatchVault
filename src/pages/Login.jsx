@@ -23,7 +23,6 @@ function Login() {
       const userDocRef = doc(db, "users", user.uid);
       const credential = GoogleAuthProvider.credentialFromResult(result);
       const tokenParaYouTube = credential.accessToken;
-
       await setDoc(userDocRef, {
         uid: user.uid,
         displayName: user.displayName,
@@ -38,10 +37,10 @@ function Login() {
         theme: 'dark',
       }, { merge: true });
 
-      navigate('/', { replace: true });
-    } catch (error) {
-      console.log(error);
-    }
+       navigate('/', { replace: true });
+      } catch {
+        // Error silencioso en producción
+      }
   }
 
   return (

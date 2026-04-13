@@ -29,7 +29,6 @@ export async function fetchPlaylistItems(playlistId, accessToken, maxResults = 5
 
     return await response.json();
   } catch (error) {
-    console.error("YouTube PlaylistItems Error:", error.message);
     throw error;
   }
 }
@@ -61,7 +60,6 @@ export async function fetchVideoDetails(videoIds, accessToken) {
     const data = await response.json();
     return data.items;
   } catch (error) {
-    console.error("YouTube VideoDetails Error:", error.message);
     throw error;
   }
 }
@@ -92,7 +90,6 @@ export async function fetchUserPlaylists(accessToken, maxResults = 50) {
 
     return await response.json();
   } catch (error) {
-    console.error("YouTube UserPlaylists Error:", error.message);
     throw error;
   }
 }

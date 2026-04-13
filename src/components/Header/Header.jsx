@@ -36,8 +36,7 @@ function Header() {
           />
           {isMenuOpen && (
             <div className={styles.dropdown}>
-
-              {/* Botones normales con tamaño pequeño */}
+              {/*
               <Button size="small" variant="normal" width="100%">
                 Mi Perfil
               </Button>
@@ -45,6 +44,7 @@ function Header() {
               <Button size="small" variant="normal" width="100%">
                 Ajustes
               </Button>
+              */}
 
               {/* Botón de alerta con tamaño pequeño */}
               <Button size="small" variant="alert" width="100%" onClick={handleSignOut}>

@@ -81,15 +81,13 @@ export default function useSeenVideosList(userId) {
         setError(null);
         setLoading(false);
       },
-      (err) => {
+       (err) => {
         // Si el índice aún se está construyendo u otra precondición falla,
         // devolvemos lista vacía sin propagar el error a la UI.
         if (err && err.code === 'failed-precondition') {
-          console.warn('useSeenVideosList: índice en construcción o precondición fallida.', err);
           setVideos([]);
           setError(null);
         } else {
-          console.warn('useSeenVideosList onSnapshot error:', err);
           setVideos([]);
           setError(err);
         }

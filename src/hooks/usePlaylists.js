@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "./useAuth";
 import { fetchUserPlaylists } from "../services/youtube";
 
@@ -6,59 +6,86 @@ function usePlaylists(maxResults = 50) {
   const [playlists, setPlaylists] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [retryCount, setRetryCount] = useState(0);
 
   const { getYoutubeToken, logout } = useAuth();
 
-  useEffect(() => {
+  const loadPlaylists = useCallback(async (forceTokenRefresh = false) => {
     let isMounted = true;
 
-    async function loadPlaylists() {
-      try {
-        setLoading(true);
-        setError(null);
+    try {
+      setLoading(true);
+      setError(null);
 
-        // 1. Obtener el token de acceso de Googlege
-        const token = await getYoutubeToken();
+      // 1. Obtener el token de acceso de Google
+      const token = await getYoutubeToken(forceTokenRefresh);
 
-        // 2. Si no hay token, el usuario debe re-autenticarse
-        if (!token) {
-          console.warn("No se encontró token para cargar playlists. Cerrando sesión...");
-          await logout();
-          return;
+      // 2. Si no hay token, el usuario debe re-autenticarse
+      if (!token) {
+        await logout();
+        return;
+      }
+
+      // 3. Llamada al servicio de YouTube para obtener las playlists (mine=true)
+      const data = await fetchUserPlaylists(token, maxResults);
+
+      if (isMounted) {
+        if (data && data.items) {
+          setPlaylists(data.items);
+          setRetryCount(0); // Resetear contador de reintentos
+        } else {
+          setPlaylists([]);
         }
+      }
 
-        // 3. Llamada al servicio de YouTube para obtener las playlists (mine=true)
-        const data = await fetchUserPlaylists(token, maxResults);
-
+    } catch (err) {
+      // Manejar error 401 (token expirado)
+      if (err.message?.includes('401') || 
+          err.message?.includes('Unauthorized') ||
+          err.message?.includes('invalid authentication credentials')) {
+        
         if (isMounted) {
-          if (data && data.items) {
-            setPlaylists(data.items);
+          if (retryCount < 1) {
+            // Primer intento: intentar con token fresco
+            setRetryCount(prev => prev + 1);
+            setTimeout(() => loadPlaylists(true), 1000); // Reintentar con forceRefresh
+            return;
           } else {
-            setPlaylists([]);
+            // Segundo intento falló, cerrar sesión
+            setError("Tu sesión expiró. Por favor, iniciá sesión nuevamente.");
+            await logout();
           }
         }
-
-      } catch (err) {
-        console.error("Error cargando las playlists del usuario:", err);
-        if (isMounted) setError(err.message);
-      } finally {
-        if (isMounted) setLoading(false);
+      } else {
+        // Otro tipo de error
+        if (isMounted) setError(err.message || "Error desconocido");
       }
+    } finally {
+      if (isMounted) setLoading(false);
     }
+  }, [maxResults, getYoutubeToken, logout, retryCount]);
 
-    loadPlaylists();
+  useEffect(() => {
+    let isMounted = true;
+    
+    if (isMounted) {
+      loadPlaylists();
+    }
 
     return () => {
       isMounted = false;
     };
-  }, [maxResults, getYoutubeToken, logout]);
+  }, [loadPlaylists]);
 
   return {
     playlists,
     loading,
     error,
-    // Permite al Dashboard forzar una recarga si el usuario crea una nueva lista
-    refreshPlaylists: () => setLoading(true)
+    // Permite forzar recarga (con o sin refresh de token)
+    refreshPlaylists: (forceTokenRefresh = false) => {
+      setRetryCount(0);
+      loadPlaylists(forceTokenRefresh);
+    }
   };
 }
 
