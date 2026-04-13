@@ -5,7 +5,9 @@ import { auth } from '../../firebase';
 import { signOut } from 'firebase/auth';
 import Button from '../Button/Button';
 // Usar el logo blanco original
-import logoWhite from '../../assets/logo-white.png';
+// Usar el logo blanco desde la carpeta de favicons (usuario prefirió los íconos blancos)
+// Nota: la carpeta tiene paréntesis en el nombre; Vite lo resolverá correctamente.
+import logoWhite from '../../assets/favicon (1)/favicon-96x96.png';
 
 function Header() {
   const location = useLocation();
