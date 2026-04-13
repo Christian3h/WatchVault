@@ -1,64 +1,66 @@
-/* StatisticsPanel - Estilo B&W minimalista (tema oscuro) */
+/* StatisticsPanel - Estilo B&W con Saira Stencil */
 
 .panel {
-  background-color: #1a1a1a;
-  border: 1px solid #3f3f3f;
+  background-color: #111;
+  border: 2px solid #333;
   border-radius: 12px;
-  margin-top: 1.5rem;
   overflow: hidden;
   transition: all 0.3s ease;
+  font-family: "Saira Stencil", sans-serif;
 }
 
 .panel:hover {
-  border-color: #555555;
+  border-color: var(--color-primary, white);
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 1.25rem;
-  background-color: #222222;
-  border-bottom: 1px solid transparent;
+  padding: 1.25rem 1.5rem;
+  background-color: #1a1a1a;
+  border-bottom: 2px solid transparent;
 }
 
 .panel.expanded .header {
-  border-bottom-color: #3f3f3f;
+  border-bottom-color: #333;
 }
 
 .header h3 {
   margin: 0;
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #f1f1f1;
+  font-size: 1.3rem;
+  font-weight: 400;
+  color: var(--color-primary, white);
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  letter-spacing: 0.5px;
 }
 
 .toggleButton {
   background: none;
-  border: 1px solid #3f3f3f;
-  color: #f1f1f1;
-  width: 32px;
-  height: 32px;
+  border: 2px solid var(--color-primary, white);
+  color: var(--color-primary, white);
+  width: 36px;
+  height: 36px;
   border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  font-size: 1.2rem;
-  font-weight: 600;
+  font-size: 1.5rem;
+  font-weight: bold;
+  font-family: "Saira Stencil", sans-serif;
   transition: all 0.2s ease;
 }
 
 .toggleButton:hover {
-  background-color: #333333;
-  border-color: #555555;
+  background-color: var(--color-primary, white);
+  color: var(--color-background, black);
 }
 
 .toggleButton:focus-visible {
-  outline: 2px solid #ffffff;
+  outline: 2px solid var(--color-primary, white);
   outline-offset: 2px;
 }
 
@@ -93,80 +95,87 @@
 
 .loading p {
   margin: 0;
-  color: #aaaaaa;
+  color: #888;
   font-size: 0.9rem;
+  font-family: "Saira Stencil", sans-serif;
 }
 
 /* Error state */
 .error {
-  padding: 1.25rem;
-  background-color: rgba(255, 107, 107, 0.1);
-  border-left: 3px solid #ff6b6b;
+  padding: 1.5rem;
+  background-color: rgba(255, 0, 0, 0.1);
+  border-left: 4px solid var(--color-alert, #ff0000);
   border-radius: 4px;
-  margin: 1.25rem;
+  margin: 1.5rem;
 }
 
 .error p {
   margin: 0 0 0.5rem 0;
-  color: #ff6b6b;
-  font-weight: 500;
+  color: var(--color-alert, #ff0000);
+  font-weight: 400;
+  font-family: "Saira Stencil", sans-serif;
 }
 
 .error small {
-  color: #cccccc;
+  color: #ccc;
   font-size: 0.85rem;
+  font-family: "Saira Stencil", sans-serif;
 }
 
 /* Empty state */
 .emptyState {
   text-align: center;
-  padding: 2rem 1rem;
+  padding: 3rem 1rem;
 }
 
 .emptyState p {
-  margin: 0 0 0.5rem 0;
-  color: #f1f1f1;
-  font-size: 1rem;
+  margin: 0 0 0.75rem 0;
+  color: var(--color-primary, white);
+  font-size: 1.1rem;
+  font-family: "Saira Stencil", sans-serif;
+  letter-spacing: 0.5px;
 }
 
 .emptyState small {
-  color: #888888;
-  font-size: 0.85rem;
+  color: #888;
+  font-size: 0.9rem;
+  font-family: "Saira Stencil", sans-serif;
 }
 
 /* Quick stats */
 .quickStats {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 2rem;
 }
 
 .statCard {
-  background-color: #222222;
-  border: 1px solid #3f3f3f;
-  border-radius: 8px;
-  padding: 1rem;
+  background-color: #1a1a1a;
+  border: 2px solid #333;
+  border-radius: 10px;
+  padding: 1.25rem;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  transition: all 0.2s ease;
+  gap: 1rem;
+  transition: all 0.3s ease;
 }
 
 .statCard:hover {
-  border-color: #555555;
-  transform: translateY(-2px);
+  border-color: var(--color-primary, white);
+  transform: translateY(-4px);
 }
 
 .statIcon {
-  font-size: 1.5rem;
-  width: 40px;
-  height: 40px;
+  font-size: 2rem;
+  width: 50px;
+  height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #2a2a2a;
-  border-radius: 6px;
+  background-color: #222;
+  border-radius: 8px;
+  flex-shrink: 0;
 }
 
 .statContent {
@@ -174,23 +183,26 @@
 }
 
 .statValue {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #ffffff;
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--color-primary, white);
   line-height: 1;
   margin-bottom: 0.25rem;
+  font-family: "Saira Stencil", sans-serif;
+  letter-spacing: 1px;
 }
 
 .statLabel {
-  font-size: 0.85rem;
-  color: #aaaaaa;
+  font-size: 0.9rem;
+  color: #888;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 1px;
+  font-family: "Saira Stencil", sans-serif;
 }
 
 /* Sections */
 .section {
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
 }
 
 .section:last-child {
@@ -198,79 +210,90 @@
 }
 
 .section h4 {
-  margin: 0 0 1rem 0;
-  font-size: 1rem;
-  font-weight: 600;
-  color: #f1f1f1;
+  margin: 0 0 1.25rem 0;
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: var(--color-primary, white);
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  font-family: "Saira Stencil", sans-serif;
+  letter-spacing: 0.5px;
 }
 
 /* Channels list */
 .channelsList {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 1rem;
 }
 
 .channelItem {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.5rem;
-  border-radius: 6px;
-  transition: background-color 0.2s ease;
+  gap: 1rem;
+  padding: 0.75rem;
+  border-radius: 8px;
+  background-color: #1a1a1a;
+  border: 1px solid #333;
+  transition: all 0.3s ease;
 }
 
 .channelItem:hover {
-  background-color: #222222;
+  border-color: var(--color-primary, white);
+  transform: translateX(4px);
 }
 
 .channelRank {
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #2a2a2a;
+  background-color: #222;
+  border: 2px solid var(--color-primary, white);
   border-radius: 50%;
-  font-size: 0.85rem;
+  font-size: 1rem;
   font-weight: 600;
-  color: #ffffff;
+  color: var(--color-primary, white);
+  font-family: "Saira Stencil", sans-serif;
+  flex-shrink: 0;
 }
 
 .channelInfo {
   flex: 1;
-  min-width: 0; /* Para que el texto no desborde */
+  min-width: 0;
 }
 
 .channelName {
-  font-size: 0.95rem;
-  color: #f1f1f1;
-  font-weight: 500;
+  font-size: 1rem;
+  color: var(--color-primary, white);
+  font-weight: 400;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-family: "Saira Stencil", sans-serif;
+  letter-spacing: 0.5px;
 }
 
 .channelCount {
-  font-size: 0.8rem;
-  color: #888888;
+  font-size: 0.85rem;
+  color: #888;
+  font-family: "Saira Stencil", sans-serif;
 }
 
 .channelBar {
-  flex: 0 0 80px;
-  height: 6px;
-  background-color: #2a2a2a;
-  border-radius: 3px;
+  flex: 0 0 100px;
+  height: 8px;
+  background-color: #222;
+  border-radius: 4px;
   overflow: hidden;
 }
 
 .channelBarFill {
   height: 100%;
-  background-color: #ffffff;
-  border-radius: 3px;
+  background-color: var(--color-primary, white);
+  border-radius: 4px;
   transition: width 0.5s ease;
 }
 
@@ -279,11 +302,12 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  gap: 0.5rem;
-  height: 120px;
-  padding: 0.5rem;
-  background-color: #222222;
-  border-radius: 8px;
+  gap: 0.75rem;
+  height: 140px;
+  padding: 1rem;
+  background-color: #1a1a1a;
+  border: 2px solid #333;
+  border-radius: 10px;
 }
 
 .weekDay {
@@ -295,11 +319,12 @@
 }
 
 .dayLabel {
-  font-size: 0.8rem;
-  color: #aaaaaa;
-  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  color: #888;
+  margin-bottom: 0.75rem;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 1px;
+  font-family: "Saira Stencil", sans-serif;
 }
 
 .dayBar {
@@ -311,31 +336,33 @@
 }
 
 .dayBarFill {
-  width: 70%;
-  background-color: #ffffff;
-  border-radius: 3px 3px 0 0;
+  width: 80%;
+  background-color: var(--color-primary, white);
+  border-radius: 4px 4px 0 0;
   transition: height 0.5s ease;
   min-height: 4px;
 }
 
 .dayCount {
-  font-size: 0.8rem;
-  color: #f1f1f1;
+  font-size: 0.9rem;
+  color: var(--color-primary, white);
   font-weight: 600;
-  margin-top: 0.5rem;
+  margin-top: 0.75rem;
+  font-family: "Saira Stencil", sans-serif;
 }
 
 /* Footer */
 .footer {
-  margin-top: 1.5rem;
-  padding-top: 1rem;
-  border-top: 1px solid #3f3f3f;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 2px solid #333;
   text-align: center;
 }
 
 .footer small {
-  color: #888888;
-  font-size: 0.8rem;
+  color: #666;
+  font-size: 0.85rem;
+  font-family: "Saira Stencil", sans-serif;
 }
 
 /* Responsive */

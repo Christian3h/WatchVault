@@ -97,8 +97,12 @@ export function useStatistics(userId) {
         setLoading(true);
         setError(null);
 
-        const seenVideosRef = collection(db, "users", userId, "seenVideos");
-        const q = query(seenVideosRef);
+        const userVideosMetaRef = collection(db, "userVideosMeta");
+        const q = query(
+          userVideosMetaRef,
+          where('userId', '==', userId),
+          where('seen', '==', true)
+        );
         const snapshot = await getDocs(q);
         
         if (snapshot.empty) {
@@ -121,9 +125,16 @@ export function useStatistics(userId) {
         
         snapshot.forEach(doc => {
           const data = doc.data();
-          videos.push(data);
-          if (data.watchedAt) {
-            watchedDates.push(data.watchedAt);
+          videos.push({
+            ...data,
+            // Mapear campos para consistencia
+            channelTitle: data.channel || 'Desconocido',
+            watchedAt: data.updatedAt?.toDate?.()?.toISOString() || new Date().toISOString()
+          });
+          
+          if (data.updatedAt) {
+            const date = data.updatedAt.toDate ? data.updatedAt.toDate() : new Date(data.updatedAt);
+            watchedDates.push(date.toISOString());
           }
         });
 

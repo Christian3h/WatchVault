@@ -1,0 +1,202 @@
+/* Statistics Page - Estilo B&W con Saira Stencil */
+
+.container {
+  min-height: 100vh;
+  background-color: var(--color-background, black);
+  color: var(--color-primary, white);
+  font-family: "Saira Stencil", sans-serif;
+}
+
+.main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 80px 24px 40px 24px;
+  box-sizing: border-box;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #333;
+}
+
+.backButton {
+  background: none;
+  border: 2px solid var(--color-primary, white);
+  color: var(--color-primary, white);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.5rem;
+  font-weight: bold;
+  font-family: "Saira Stencil", sans-serif;
+  transition: all 0.2s ease;
+}
+
+.backButton:hover {
+  background-color: var(--color-primary, white);
+  color: var(--color-background, black);
+}
+
+.backButton:focus-visible {
+  outline: 2px solid var(--color-primary, white);
+  outline-offset: 2px;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 400;
+  margin: 0;
+  text-align: center;
+  flex: 1;
+  letter-spacing: 1px;
+}
+
+.headerSpacer {
+  width: 48px; /* Mismo ancho que el botón para centrar el título */
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Insights section */
+.insights {
+  background-color: #111;
+  border: 2px solid #333;
+  border-radius: 12px;
+  padding: 2rem;
+}
+
+.insights h2 {
+  font-size: 1.8rem;
+  font-weight: 400;
+  margin: 0 0 1.5rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  letter-spacing: 0.5px;
+}
+
+.insightCards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.insightCard {
+  background-color: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  transition: all 0.3s ease;
+}
+
+.insightCard:hover {
+  border-color: var(--color-primary, white);
+  transform: translateY(-4px);
+}
+
+.insightIcon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.insightContent {
+  flex: 1;
+}
+
+.insightContent h3 {
+  font-size: 1.2rem;
+  font-weight: 400;
+  margin: 0 0 0.5rem 0;
+  color: var(--color-primary, white);
+  letter-spacing: 0.5px;
+}
+
+.insightContent p {
+  font-size: 0.95rem;
+  margin: 0;
+  color: #ccc;
+  line-height: 1.5;
+}
+
+.insightContent strong {
+  color: var(--color-primary, white);
+  font-weight: 600;
+}
+
+/* Footer */
+.footer {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #333;
+  text-align: center;
+}
+
+.footerText {
+  font-size: 0.9rem;
+  color: #888;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.lastUpdated {
+  font-size: 0.85rem;
+  color: #666;
+  font-style: italic;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .main {
+    padding: 70px 16px 30px 16px;
+  }
+  
+  .title {
+    font-size: 2rem;
+  }
+  
+  .insightCards {
+    grid-template-columns: 1fr;
+  }
+  
+  .insights {
+    padding: 1.5rem;
+  }
+  
+  .header {
+    margin-bottom: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.8rem;
+  }
+  
+  .backButton {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
+  
+  .headerSpacer {
+    width: 40px;
+  }
+}
