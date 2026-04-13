@@ -7,6 +7,7 @@ import Button from '../Button/Button';
 
 function Header() {
   const location = useLocation();
+  const navigate = useNavigate();
   const [photo, setPhoto] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   //funcion para cerrar sesion
@@ -33,20 +34,6 @@ function Header() {
           WatchVault
         </Link>
         
-        {/* Navegación principal */}
-        <div className={styles.navLinks}>
-          {location.pathname === '/' && (
-            <Link to="/stats" className={styles.navLink}>
-              Estadísticas
-            </Link>
-          )}
-          {location.pathname === '/stats' && (
-            <Link to="/" className={styles.navLink}>
-              Dashboard
-            </Link>
-          )}
-        </div>
-        
         <div className={styles.menuContainer}>
           <img src={photo}
             alt="foto de perfil"
@@ -55,6 +42,19 @@ function Header() {
           />
           {isMenuOpen && (
             <div className={styles.dropdown}>
+              {/* Estadísticas */}
+              <Button 
+                size="small" 
+                variant="normal" 
+                width="100%"
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  navigate('/stats');
+                }}
+              >
+                Estadísticas
+              </Button>
+
               {/*
               <Button size="small" variant="normal" width="100%">
                 Mi Perfil

@@ -15,39 +15,9 @@
 }
 
 .header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   margin-bottom: 2rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid #333;
-}
-
-.backButton {
-  background: none;
-  border: 2px solid var(--color-primary, white);
-  color: var(--color-primary, white);
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  font-size: 1.5rem;
-  font-weight: bold;
-  font-family: "Saira Stencil", sans-serif;
-  transition: all 0.2s ease;
-}
-
-.backButton:hover {
-  background-color: var(--color-primary, white);
-  color: var(--color-background, black);
-}
-
-.backButton:focus-visible {
-  outline: 2px solid var(--color-primary, white);
-  outline-offset: 2px;
 }
 
 .title {
@@ -55,12 +25,7 @@
   font-weight: 400;
   margin: 0;
   text-align: center;
-  flex: 1;
   letter-spacing: 1px;
-}
-
-.headerSpacer {
-  width: 48px; /* Mismo ancho que el botón para centrar el título */
 }
 
 .content {

@@ -28,15 +28,7 @@ function Statistics() {
       
       <main className={styles.main}>
         <div className={styles.header}>
-          <button 
-            className={styles.backButton}
-            onClick={() => navigate('/')}
-            aria-label="Volver al dashboard"
-          >
-            ←
-          </button>
           <h1 className={styles.title}>Estadísticas</h1>
-          <div className={styles.headerSpacer}></div>
         </div>
 
         <div className={styles.content}>
