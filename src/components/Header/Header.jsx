@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import styles from './Header.module.css';
 import { auth } from '../../firebase';
 import { signOut } from 'firebase/auth';
 import Button from '../Button/Button';
+// Usar el logo blanco original
+import logoWhite from '../../assets/logo-white.png';
 
 function Header() {
   const location = useLocation();
@@ -31,7 +33,12 @@ function Header() {
     <header className={styles.header}>
       <nav className={styles.nav}>
         <Link to="/" className={styles.logo}>
-          WatchVault
+          <img 
+            src={logoWhite} 
+            alt="WatchVault" 
+            className={styles.logoImage}
+          />
+          <span className={styles.logoText}>WatchVault</span>
         </Link>
         
         <div className={styles.menuContainer}>
