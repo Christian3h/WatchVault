@@ -200,6 +200,14 @@
   font-family: "Saira Stencil", sans-serif;
 }
 
+.statSubtext {
+  font-size: 0.8rem;
+  color: #666;
+  margin-top: 0.25rem;
+  font-family: "Saira Stencil", sans-serif;
+  letter-spacing: 0.5px;
+}
+
 /* Sections */
 .section {
   margin-bottom: 2rem;

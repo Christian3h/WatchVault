@@ -33,14 +33,19 @@ function Header() {
           WatchVault
         </Link>
         
-        {/* Navegación principal (solo en dashboard) */}
-        {location.pathname === '/' && (
-          <div className={styles.navLinks}>
+        {/* Navegación principal */}
+        <div className={styles.navLinks}>
+          {location.pathname === '/' && (
             <Link to="/stats" className={styles.navLink}>
-              📊 Estadísticas
+              Estadísticas
             </Link>
-          </div>
-        )}
+          )}
+          {location.pathname === '/stats' && (
+            <Link to="/" className={styles.navLink}>
+              Dashboard
+            </Link>
+          )}
+        </div>
         
         <div className={styles.menuContainer}>
           <img src={photo}

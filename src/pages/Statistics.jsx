@@ -35,7 +35,7 @@ function Statistics() {
           >
             ←
           </button>
-          <h1 className={styles.title}>📊 Estadísticas</h1>
+          <h1 className={styles.title}>Estadísticas</h1>
           <div className={styles.headerSpacer}></div>
         </div>
 
@@ -48,24 +48,24 @@ function Statistics() {
 
           {stats && stats.totalVideos > 0 && (
             <div className={styles.insights}>
-              <h2>💡 Insights</h2>
+              <h2>Insights</h2>
               
               <div className={styles.insightCards}>
                 {stats.videosToday > 0 && (
                   <div className={styles.insightCard}>
-                    <div className={styles.insightIcon}>🎯</div>
+                    <div className={styles.insightIcon}>HOY</div>
                     <div className={styles.insightContent}>
-                      <h3>Hoy estás activo</h3>
-                      <p>Llevas {stats.videosToday} video{stats.videosToday !== 1 ? 's' : ''} visto{stats.videosToday !== 1 ? 's' : ''} hoy.</p>
+                      <h3>Actividad hoy</h3>
+                      <p>Llevas {stats.videosToday} video{stats.videosToday !== 1 ? 's' : ''} visto{stats.videosToday !== 1 ? 's' : ''} hoy{stats.todayWatchTime ? ` (${stats.todayWatchTime})` : ''}.</p>
                     </div>
                   </div>
                 )}
 
                 {stats.streak > 1 && (
                   <div className={styles.insightCard}>
-                    <div className={styles.insightIcon}>🔥</div>
+                    <div className={styles.insightIcon}>RACHA</div>
                     <div className={styles.insightContent}>
-                      <h3>¡Racha en marcha!</h3>
+                      <h3>Racha activa</h3>
                       <p>Llevas {stats.streak} día{stats.streak !== 1 ? 's' : ''} consecutivo{stats.streak !== 1 ? 's' : ''} usando WatchVault.</p>
                     </div>
                   </div>
@@ -73,17 +73,17 @@ function Statistics() {
 
                 {stats.topChannels.length > 0 && (
                   <div className={styles.insightCard}>
-                    <div className={styles.insightIcon}>🏆</div>
+                    <div className={styles.insightIcon}>TOP</div>
                     <div className={styles.insightContent}>
                       <h3>Canal favorito</h3>
-                      <p>Ves más contenido de <strong>{stats.topChannels[0].name}</strong> ({stats.topChannels[0].count} videos).</p>
+                      <p>Ves más contenido de <strong>{stats.topChannels[0].name}</strong> ({stats.topChannels[0].count} videos{stats.topChannels[0].watchTime ? `, ${stats.topChannels[0].watchTime}` : ''}).</p>
                     </div>
                   </div>
                 )}
 
                 {stats.weeklyActivity && stats.weeklyActivity.some(day => day.count > 0) && (
                   <div className={styles.insightCard}>
-                    <div className={styles.insightIcon}>📅</div>
+                    <div className={styles.insightIcon}>DÍA</div>
                     <div className={styles.insightContent}>
                       <h3>Día más activo</h3>
                       <p>
@@ -92,6 +92,16 @@ function Statistics() {
                           return `Los ${maxDay.day.toLowerCase()}s ves más videos (${maxDay.count} en promedio).`;
                         })()}
                       </p>
+                    </div>
+                  </div>
+                )}
+
+                {stats.totalWatchTime && (
+                  <div className={styles.insightCard}>
+                    <div className={styles.insightIcon}>TIEMPO</div>
+                    <div className={styles.insightContent}>
+                      <h3>Tiempo total</h3>
+                      <p>Has visto {stats.totalVideos} videos por un total de <strong>{stats.totalWatchTime}</strong>.</p>
                     </div>
                   </div>
                 )}

@@ -85,6 +85,38 @@ export function useStatistics(userId) {
     return activity;
   }, []);
 
+  // Función para convertir segundos a formato legible
+  const formatWatchTime = useCallback((seconds) => {
+    if (!seconds || seconds === 0) return null;
+    
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    
+    if (hours > 0) {
+      return `${hours}h ${minutes}m`;
+    }
+    return `${minutes}m`;
+  }, []);
+
+  // Función para parsear duración de YouTube (PT15M30S)
+  const parseYouTubeDuration = useCallback((duration) => {
+    if (!duration) return 0;
+    
+    try {
+      // Formato ISO 8601: PT15M30S, PT1H30M, etc.
+      const match = duration.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
+      if (!match) return 0;
+      
+      const hours = parseInt(match[1] || 0);
+      const minutes = parseInt(match[2] || 0);
+      const seconds = parseInt(match[3] || 0);
+      
+      return (hours * 3600) + (minutes * 60) + seconds;
+    } catch {
+      return 0;
+    }
+  }, []);
+
   useEffect(() => {
     if (!userId) {
       setStats(null);
@@ -122,19 +154,38 @@ export function useStatistics(userId) {
 
         const videos = [];
         const watchedDates = [];
+        let totalSeconds = 0;
+        let todaySeconds = 0;
+        let weekSeconds = 0;
         
         snapshot.forEach(doc => {
           const data = doc.data();
+          const videoSeconds = parseYouTubeDuration(data.rawDuration) || data.watchedSeconds || 0;
+          const watchedAt = data.updatedAt?.toDate?.() || new Date(data.updatedAt) || new Date();
+          
           videos.push({
             ...data,
             // Mapear campos para consistencia
             channelTitle: data.channel || 'Desconocido',
-            watchedAt: data.updatedAt?.toDate?.()?.toISOString() || new Date().toISOString()
+            watchedAt: watchedAt.toISOString(),
+            durationSeconds: videoSeconds
           });
           
-          if (data.updatedAt) {
-            const date = data.updatedAt.toDate ? data.updatedAt.toDate() : new Date(data.updatedAt);
-            watchedDates.push(date.toISOString());
+          watchedDates.push(watchedAt.toISOString());
+          totalSeconds += videoSeconds;
+          
+          // Tiempo hoy
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+          if (watchedAt >= today) {
+            todaySeconds += videoSeconds;
+          }
+          
+          // Tiempo esta semana
+          const weekAgo = new Date();
+          weekAgo.setDate(weekAgo.getDate() - 7);
+          if (watchedAt >= weekAgo) {
+            weekSeconds += videoSeconds;
           }
         });
 
@@ -162,7 +213,31 @@ export function useStatistics(userId) {
           v.watchedAt && new Date(v.watchedAt) >= monthAgo
         ).length;
 
-        const topChannels = groupByChannel(videos).slice(0, 5);
+        // Agrupar canales con tiempo total
+        const channelGroups = {};
+        videos.forEach(video => {
+          const channel = video.channelTitle;
+          if (!channelGroups[channel]) {
+            channelGroups[channel] = {
+              count: 0,
+              totalSeconds: 0,
+              videos: []
+            };
+          }
+          channelGroups[channel].count++;
+          channelGroups[channel].totalSeconds += video.durationSeconds || 0;
+          channelGroups[channel].videos.push(video);
+        });
+
+        const topChannels = Object.entries(channelGroups)
+          .map(([name, data]) => ({ 
+            name, 
+            ...data,
+            watchTime: formatWatchTime(data.totalSeconds)
+          }))
+          .sort((a, b) => b.count - a.count)
+          .slice(0, 5);
+
         const weeklyActivity = calculateWeeklyActivity(videos);
         const streak = calculateStreak(watchedDates);
         
@@ -176,6 +251,9 @@ export function useStatistics(userId) {
           videosToday,
           videosThisWeek,
           videosThisMonth,
+          totalWatchTime: formatWatchTime(totalSeconds),
+          todayWatchTime: formatWatchTime(todaySeconds),
+          weekWatchTime: formatWatchTime(weekSeconds),
           topChannels,
           weeklyActivity,
           streak,
@@ -196,7 +274,7 @@ export function useStatistics(userId) {
     // Actualizar cada 5 minutos si la app está abierta
     const interval = setInterval(fetchStatistics, 5 * 60 * 1000);
     return () => clearInterval(interval);
-  }, [userId, calculateStreak, groupByChannel, calculateWeeklyActivity]);
+  }, [userId, calculateStreak, groupByChannel, calculateWeeklyActivity, formatWatchTime, parseYouTubeDuration]);
 
   return { stats, loading, error };
 }
