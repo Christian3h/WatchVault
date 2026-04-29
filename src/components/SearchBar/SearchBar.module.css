@@ -72,6 +72,6 @@
 /* Responsive */
 @media (max-width: 768px) {
   .searchContainer {
-    max-width: 100%;
+    max-width: 82%;
   }
 }

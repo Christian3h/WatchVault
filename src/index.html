@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
     <!-- Favicon Set (rutas relativas para que Vite las reescriba en build) -->
+    <!-- Prefer explicit existing assets; add fallback data URI to avoid 404 on /favicon.ico during dev -->
     <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <link rel="shortcut icon" href="favicon.ico" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' fill='%23863bff'/%3E%3C/svg%3E">
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
     
     <!-- Web App Manifest -->

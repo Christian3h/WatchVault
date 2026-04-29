@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
-import { initializeFirestore, persistentLocalCache } from "firebase/firestore";
+import { getFirestore } from "firebase/firestore";
 
 
 const firebaseConfig = {
@@ -17,6 +17,6 @@ export const app = initializeApp(firebaseConfig);
 
 export const auth = getAuth(app);
 
-export const db = initializeFirestore(app, {
-  localCache: persistentLocalCache()
-});
+// Use the standard Firestore instance. Avoid persistentLocalCache which
+// opens background watch streams that may create long-lived network channels.
+export const db = getFirestore(app);

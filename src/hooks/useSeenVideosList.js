@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import {
   collection,
-  onSnapshot,
+  getDocs,
   query,
   where,
 } from 'firebase/firestore';
@@ -51,9 +51,14 @@ export default function useSeenVideosList(userId) {
       where('seen', '==', true)
     );
 
-    const unsubscribe = onSnapshot(
-      q,
-      (snap) => {
+    // Reemplazamos la escucha en tiempo real por una lectura puntual (getDocs)
+    // para evitar abrir canales "Listen" permanentes que producen errores
+    // net::ERR_NETWORK_CHANGED en entornos con cambios de red.
+    let mounted = true;
+
+    const fetchData = async () => {
+      try {
+        const snap = await getDocs(q);
         const items = snap.docs.map((docSnap) => {
           const data = docSnap.data();
           const ts = data.updatedAt;
@@ -77,26 +82,29 @@ export default function useSeenVideosList(userId) {
           };
         });
 
-        setVideos(items);
-        setError(null);
-        setLoading(false);
-      },
-       (err) => {
-        // Si el índice aún se está construyendo u otra precondición falla,
-        // devolvemos lista vacía sin propagar el error a la UI.
-        if (err && err.code === 'failed-precondition') {
-          setVideos([]);
+        if (mounted) {
+          setVideos(items);
           setError(null);
-        } else {
-          setVideos([]);
-          setError(err);
         }
-        setLoading(false);
+      } catch (err) {
+        if (mounted) {
+          if (err && err.code === 'failed-precondition') {
+            setVideos([]);
+            setError(null);
+          } else {
+            setVideos([]);
+            setError(err);
+          }
+        }
+      } finally {
+        if (mounted) setLoading(false);
       }
-    );
+    };
+
+    fetchData();
 
     return () => {
-      unsubscribe();
+      mounted = false;
     };
   }, [userId]);
 
